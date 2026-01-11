@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carz | Settings</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for settings page */
+        :root {
+            --primary: #ff8c42;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --card-bg: #f8f9fa;
+            --border: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --card-bg: #1a1a1a;
+            --border: #2d2d2d;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, rgba(255, 140, 66, 0.15), transparent),
+                radial-gradient(circle at bottom right, rgba(255, 140, 66, 0.1), transparent),
+                var(--bg);
+            color: var(--text);
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            /* Prevent scrolling */
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Force Center Method - Absolute Positioning */
+        #settings-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            border: 2px solid var(--border);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        /* Shapes from other pages */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        .shape {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite alternate;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            z-index: 1000;
+            color: var(--text);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text);
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            transition: 0.2s;
+            text-decoration: none;
+            line-height: 1;
+        }
+
+        .back-btn:hover {
+            color: var(--primary);
+            transform: translateX(-3px);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 30px;
+            margin-top: 10px;
+            letter-spacing: 2px;
+            font-size: 2rem;
+        }
+
+        .setting-box {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .setting-box:hover {
+            border-color: var(--primary);
+        }
+
+        .btn.danger {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .btn.danger:hover {
+            background: #ff2e43;
+            transform: scale(1.02);
+        }
+
+        /* Toggle Switch Style */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Custom Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: none;
+            /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.2s;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .modal-box h3 {
+            color: #ff4757;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .btn-confirm {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-cancel:hover {
+            background: var(--border);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="menu-bg">
+    <div class="bg-shapes" id="bgShapes">
+        <div class="shape" style="width: 500px; height: 500px; top: -150px; left: -150px;"></div>
+        <div class="shape" style="width: 400px; height: 400px; bottom: -100px; right: -100px; animation-delay: -7s;">
+        </div>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">Dark Mode</span>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-overlay" class="modal-overlay">
+        <div class="modal-box">
+            <h3>⚠️ WARNING</h3>
+            <p>Are you sure you want to delete ALL progress?</p>
+            <p style="font-size: 0.9rem; opacity: 0.7;">This removes you from Leaderboards and locks all items.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeAlert()">CANCEL</button>
+                <button class="btn-confirm" onclick="confirmReset()">YES, DELETE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-screen">
+        <button onclick="location.href='auth.html'" class="back-btn">←</button>
+        <h2>SETTINGS</h2>
+        <div class="settings-list">
+            <div class="setting-box">
+                <span title="Plays music and sound effects across the game">MASTER AUDIO</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="audio-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-box">
+                <span>GRAPHICS QUALITY</span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span id="graphics-label" style="font-size: 0.9em; opacity: 0.7;">HIGH</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="graphics-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <button onclick="showAlert()" class="btn danger">RESET ALL PROGRESS</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import DataManager from './js/data.js';
+        import audioManager from './js/audio-manager.js';
+
+        // --- Logic ---
+        window.showAlert = () => {
+            document.getElementById('custom-alert-overlay').style.display = 'flex';
+            audioManager.playAlert();
+        };
+
+        window.closeAlert = () => {
+            document.getElementById('custom-alert-overlay').style.display = 'none';
+        };
+
+        window.confirmReset = async () => {
+            audioManager.playReset();
+            const btn = document.querySelector('.btn-confirm');
+            btn.innerText = "DELETING...";
+            btn.style.background = "#333";
+            btn.disabled = true;
+
+            try {
+                await DataManager.resetGameData();
+                setTimeout(() => location.href = 'index.html', 1500);
+            } catch (e) {
+                console.error("Reset failed", e);
+                alert("Reset failed! Check console.");
+                btn.innerText = "ERROR";
+            }
+        };
+
+        async function init() {
+            try { await DataManager.init(); } catch (e) { }
+            const data = DataManager.getGameData();
+
+            const audioToggle = document.getElementById('audio-toggle');
+            const graphicsToggle = document.getElementById('graphics-toggle');
+            const graphicsLabel = document.getElementById('graphics-label');
+
+            // Initialize UI from Saved Data
+            const savedSettings = data.settings || { audio: true, graphics: 'high' };
+
+            audioToggle.checked = savedSettings.audio;
+            graphicsToggle.checked = savedSettings.graphics === 'high';
+
+            applyGraphics(graphicsToggle.checked);
+
+            // Event Listeners
+            audioToggle.onchange = () => {
+                const val = audioToggle.checked;
+                audioManager.toggle(val);
+                if (val) audioManager.playClick();
+                saveSettings();
+            };
+
+            graphicsToggle.onchange = () => {
+                const val = graphicsToggle.checked;
+                if (audioManager.enabled) audioManager.playClick();
+                applyGraphics(val);
+                saveSettings();
+            };
+
+            function applyGraphics(isHigh) {
+                const bg = document.getElementById('bgShapes');
+                if (isHigh) {
+                    bg.style.opacity = '1';
+                    graphicsLabel.innerText = "HIGH";
+                } else {
+                    bg.style.opacity = '0';
+                    graphicsLabel.innerText = "LOW";
+                }
+            }
+
+            function saveSettings() {
+                const newSettings = {
+                    audio: audioToggle.checked,
+                    graphics: graphicsToggle.checked ? 'high' : 'low'
+                };
+                DataManager.save('settings', newSettings);
+            }
+        }
+
+        // --- Theme Logic ---
+        window.toggleTheme = () => {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+            audioManager.playClick();
+        };
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').textContent = '☀️';
+            document.getElementById('themeText').textContent = 'Light Mode';
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

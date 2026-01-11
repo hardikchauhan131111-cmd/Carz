@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carz | Controls</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff8c42;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --card-bg: #f8f9fa;
+            --border: #e0e0e0;
+            --primary-glow: rgba(255, 140, 66, 0.4);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --card-bg: #1a1a1a;
+            --border: #2d2d2d;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, rgba(255, 140, 66, 0.15), transparent),
+                radial-gradient(circle at bottom right, rgba(255, 140, 66, 0.1), transparent),
+                var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .page-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: 50px auto;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: 0.2s;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateX(-4px);
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .controls-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .control-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .key-badge {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-bottom: 4px solid var(--border);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--primary);
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .action-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.7;
+            text-align: right;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-area {
+            margin-top: 10px;
+            width: 100%;
+            height: 110px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            border-bottom: 2px solid var(--border);
+            overflow: hidden;
+        }
+
+        .ground-line {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--text);
+            opacity: 0.2;
+        }
+
+        #demo-car {
+            position: relative;
+            width: 100px;
+            height: 50px;
+            margin-bottom: 5px;
+            transition: transform 0.1s;
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+        }
+
+        .car-body {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .car-wheel {
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            bottom: 0;
+            z-index: 3;
+        }
+
+        .wheel-left {
+            left: 12px;
+        }
+
+        .wheel-right {
+            right: 12px;
+        }
+
+        /* Animations */
+        @keyframes driveRight {
+            0% {
+                transform: translateX(0) rotate(0);
+            }
+
+            50% {
+                transform: translateX(50px) rotate(5deg);
+            }
+
+            100% {
+                transform: translateX(0) rotate(0);
+            }
+        }
+
+        .anim-move-right {
+            animation: driveRight 0.5s ease;
+        }
+
+        @keyframes driveLeft {
+            0% {
+                transform: translateX(0) rotate(0);
+            }
+
+            50% {
+                transform: translateX(-50px) rotate(-5deg);
+            }
+
+            100% {
+                transform: translateX(0) rotate(0);
+            }
+        }
+
+        .anim-move-left {
+            animation: driveLeft 0.5s ease;
+        }
+
+        @keyframes jump {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-60px) rotate(-10deg);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .anim-jump {
+            animation: jump 0.6s ease-out;
+        }
+
+        @keyframes flipLeft {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+
+        .anim-flip-left {
+            animation: flipLeft 0.8s linear;
+        }
+
+        @keyframes flipRight {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .anim-flip-right {
+            animation: flipRight 0.8s linear;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">Dark Mode</span>
+    </div>
+
+    <div class="page-card">
+        <div class="header-row">
+            <a href="auth.html" class="back-btn">←</a>
+            <h2>CONTROLS</h2>
+        </div>
+
+        <div class="controls-list">
+            <div class="control-item" data-action="right">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="key-badge">D</div>
+                    <div class="key-badge">→</div>
+                </div>
+                <div>
+                    <div class="action-text">Accelerate / Tilt Right</div>
+                </div>
+            </div>
+
+            <div class="control-item" data-action="left">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="key-badge">A</div>
+                    <div class="key-badge">←</div>
+                </div>
+                <div>
+                    <div class="action-text">Brake / Tilt Left</div>
+                </div>
+            </div>
+
+            <div class="control-item" data-action="jump">
+                <div class="key-badge">↑</div>
+                <div>
+                    <div class="action-text">Ability (Jump / Fly)</div>
+                    <div class="description">Activate anytime</div>
+                </div>
+            </div>
+
+            <div class="control-item" data-action="boost">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="key-badge">↓</div>
+                </div>
+                <div>
+                    <div class="action-text">Nitro Boost</div>
+                    <div class="description">Consumes 1 Stock</div>
+                </div>
+            </div>
+
+            <div class="control-item" data-action="flip-left">
+                <div class="key-badge">Q</div>
+                <div>
+                    <div class="action-text">Rotate Left</div>
+                    <div class="description">Mid-air flip</div>
+                </div>
+            </div>
+
+            <div class="control-item" data-action="flip-right">
+                <div class="key-badge">E</div>
+                <div>
+                    <div class="action-text">Rotate Right</div>
+                    <div class="description">Mid-air flip</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <div class="ground-line"></div>
+            <div id="demo-car">
+                <img src="images/car.svg" class="car-body" alt="Car Body">
+                <img src="images/wheel.svg" class="car-wheel wheel-left" alt="Wheel">
+                <img src="images/wheel.svg" class="car-wheel wheel-right" alt="Wheel">
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import './audio-manager.js';
+        window.toggleTheme = () => {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        };
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').textContent = '☀️';
+            document.getElementById('themeText').textContent = 'Light Mode';
+        }
+
+        // Demo Car Interaction
+        const car = document.getElementById('demo-car');
+        const controls = document.querySelectorAll('.control-item');
+
+        controls.forEach(control => {
+            control.addEventListener('click', () => {
+                const action = control.dataset.action;
+
+                // Clear existing animations
+                car.className = '';
+
+                // Trigger reflow to restart animation
+                void car.offsetWidth;
+
+                if (action === 'right') car.classList.add('anim-move-right');
+                if (action === 'left') car.classList.add('anim-move-left');
+                if (action === 'jump') car.classList.add('anim-jump');
+                if (action === 'boost') car.classList.add('anim-move-right'); // Reuse simple move or add turbo anim
+                if (action === 'flip-left') car.classList.add('anim-flip-left');
+                if (action === 'flip-right') car.classList.add('anim-flip-right');
+            });
+
+            // Add hover cursor
+            control.style.cursor = 'pointer';
+        });
+    </script>
+</body>
+
+</html>

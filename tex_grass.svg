@@ -1,0 +1,13 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#2dcc71" />
+  <!-- Blade details -->
+  <path d="M10 0 L15 30 L5 30 Z" fill="#27ae60" opacity="0.4" />
+  <path d="M50 20 L55 50 L45 50 Z" fill="#2ecc71" opacity="0.6" />
+  <path d="M100 50 L105 80 L95 80 Z" fill="#219150" opacity="0.3" />
+  <path d="M150 10 L155 40 L145 40 Z" fill="#2ecc71" opacity="0.5" />
+  <!-- Noise/Texture -->
+  <filter id="noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch" />
+  </filter>
+  <rect width="200" height="200" filter="url(#noise)" opacity="0.1" />
+</svg>

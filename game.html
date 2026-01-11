@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carz | Playing</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+</head>
+
+<body class="game-bg">
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="hud">
+            <div class="hud-top">
+                <div class="stat-box">
+                    <span class="label">COINS</span>
+                    <span id="coin-count" class="value">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">DISTANCE</span>
+                    <div id="distance"><span id="distanceCount">0</span>m</div>
+                </div>
+                <button id="ability-btn" class="ability-button">
+                    <span id="ability-icon">🚀</span>
+                    <span id="ability-count">JUMP</span>
+                </button>
+                <button id="boost-btn" class="ability-button boost-button">
+                    <span class="icon">⚡</span>
+                    <span>BOOST</span>
+                </button>
+            </div>
+            <div class="fuel-container">
+                <div class="fuel-label">FUEL</div>
+                <div class="fuel-bar-bg">
+                    <div id="fuel-fill" class="fuel-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="gameover-screen" class="screen hidden">
+            <h1 id="out-reason" class="out-title">DRIVER DOWN!</h1>
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <span class="stat-label">DISTANCE</span>
+                    <span id="final-distance" class="stat-value">0m</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">COINS</span>
+                    <span id="final-coins" class="stat-value">0</span>
+                </div>
+            </div>
+            <div class="menu-buttons">
+                <button onclick="location.reload()" class="btn primary">TRY AGAIN</button>
+                <button onclick="location.href='auth.html'" class="btn secondary">MAIN MENU</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import DataManager from './data.js';
+        import Game from './game.js';
+
+        async function init() {
+            const user = await DataManager.init();
+            if (!user) {
+                location.href = 'index.html';
+                return;
+            }
+            Game.init();
+        }
+        init();
+    </script>
+</body>
+
+</html>

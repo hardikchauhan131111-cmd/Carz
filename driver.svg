@@ -1,0 +1,10 @@
+<svg width="60" height="80" viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Torso -->
+  <rect x="20" y="30" width="20" height="40" rx="5" fill="#2980b9" />
+  <!-- Head -->
+  <circle cx="30" cy="20" r="10" fill="#f39c12" />
+  <!-- Helmet -->
+  <path d="M20 20 A10 10 0 0 1 40 20 Z" fill="#34495e" />
+  <!-- Arms -->
+  <rect x="15" y="35" width="5" height="20" rx="2" fill="#3498db" transform="rotate(-30 15 35)" />
+</svg>

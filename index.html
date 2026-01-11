@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carz | Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff8c42;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --card-bg: #f8f9fa;
+            --border: #e0e0e0;
+            --primary-glow: rgba(255, 140, 66, 0.4);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --card-bg: #1a1a1a;
+            --border: #2d2d2d;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, rgba(255, 140, 66, 0.15), transparent),
+                radial-gradient(circle at bottom right, rgba(255, 140, 66, 0.1), transparent),
+                var(--bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text);
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .btn-auth {
+            background: var(--primary);
+            color: #fff;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            font-family: inherit;
+        }
+
+        .btn-auth:hover {
+            background: #ff7a2e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        .btn-auth:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #auth-error {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+            background: rgba(255, 71, 87, 0.1);
+            border-left: 4px solid #ff4757;
+            color: #ff4757;
+            text-align: left;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: float 20s infinite alternate;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-shapes">
+        <div class="shape" style="width: 400px; height: 400px; top: -100px; left: -100px;"></div>
+        <div class="shape" style="width: 300px; height: 300px; bottom: -50px; right: -50px; animation-delay: -5s;">
+        </div>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">Dark Mode</span>
+    </div>
+
+    <div class="auth-card">
+        <div class="logo">CARZ</div>
+
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Login to your racer account</p>
+
+        <div id="auth-error"></div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label>Email *</label>
+                <input type="email" id="email" required placeholder="your@email.com">
+            </div>
+
+            <div class="input-group">
+                <label>Password *</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+
+            <button type="submit" class="btn-auth" id="loginBtn">Login</button>
+        </form>
+
+        <div class="links">
+            Don't have an account? <a href="signup.html">Sign Up</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db } from './firebase-config.js';
+        import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Check if already logged in via Session
+        if (sessionStorage.getItem('loggedInUser')) {
+            location.href = 'auth.html';
+        }
+
+        window.toggleTheme = () => {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        };
+
+        // Load Theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').textContent = '☀️';
+            document.getElementById('themeText').textContent = 'Light Mode';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('auth-error');
+            const loginBtn = document.getElementById('loginBtn');
+
+            errorEl.style.display = 'none';
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Authenticating...';
+
+            try {
+                // Manual Firestore Query (Jan Project Style)
+                const usersRef = collection(db, 'users');
+                const q = query(usersRef, where('email', '==', email), where('password', '==', password));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    errorEl.innerText = 'Invalid email or password.';
+                    errorEl.style.display = 'block';
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Login';
+                    return;
+                }
+
+                const userDoc = snapshot.docs[0];
+                const userData = userDoc.data();
+
+                // Store in Session Storage (Simulation of Jan's logic)
+                sessionStorage.setItem('loggedInUser', JSON.stringify({
+                    userId: userDoc.id,
+                    email: userData.email,
+                    name: userData.fullName || userData.email.split('@')[0]
+                }));
+
+                location.href = 'auth.html';
+            } catch (error) {
+                console.error("Login detail:", error);
+                errorEl.innerText = 'Service unavailable. Please try again later.';
+                errorEl.style.display = 'block';
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        });
+    </script>
+    <script type="module">
+        import './audio-manager.js';
+    </script>
+</body>
+
+</html>

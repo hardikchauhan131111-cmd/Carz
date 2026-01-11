@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carz | Achievements</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff8c42;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --card-bg: #f8f9fa;
+            --border: #e0e0e0;
+            --primary-glow: rgba(255, 140, 66, 0.4);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --card-bg: #1a1a1a;
+            --border: #2d2d2d;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, rgba(255, 140, 66, 0.15), transparent),
+                radial-gradient(circle at bottom right, rgba(255, 140, 66, 0.1), transparent),
+                var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+            z-index: 10;
+            position: relative;
+        }
+
+        .page-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: 0.2s;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateX(-4px);
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .achievements-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .achievement-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+            padding: 24px;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+            transition: 0.3s;
+            opacity: 0.5;
+        }
+
+        .achievement-item.unlocked {
+            opacity: 1;
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .ach-info b {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .ach-info p {
+            margin: 0;
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .ach-status {
+            font-size: 2rem;
+            filter: grayscale(1);
+            transition: 0.3s;
+        }
+
+        .achievement-item.unlocked .ach-status {
+            filter: grayscale(0);
+            transform: scale(1.1);
+        }
+
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite alternate;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-shapes">
+        <div class="shape" style="width: 500px; height: 500px; top: -100px; left: -100px;"></div>
+        <div class="shape" style="width: 400px; height: 400px; bottom: -50px; right: -50px; animation-delay: -5s;">
+        </div>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">Dark Mode</span>
+    </div>
+
+    <div id="game-container">
+        <div class="page-card">
+            <div class="header-row">
+                <a href="auth.html" class="back-btn">←</a>
+                <h2>ACHIEVEMENTS</h2>
+            </div>
+
+            <div id="achievements-content" class="achievements-list">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import DataManager from './js/data.js';
+        import './js/audio-manager.js';
+        import './js/audio-manager.js';
+
+        const ACH_CONFIG = [
+            { id: 'distance1k', title: 'ROOKIE RUNNER', desc: 'Reach 1000m in a single run' },
+            { id: 'distance5k', title: 'PRO RACER', desc: 'Reach 5000m in a single run' },
+            { id: 'distance10k', title: 'ULTIMATE RACER', desc: 'Reach 10,000m in a single run' },
+            { id: 'coins1k', title: 'PIGGY BANK', desc: 'Accumulate 1000 coins total' },
+            { id: 'coins10k', title: 'COIN MOGUL', desc: 'Accumulate 10,000 coins total' },
+            { id: 'coins50k', title: 'GOLDEN TYCOON', desc: 'Accumulate 50,000 coins total' },
+            { id: 'allVehicles', title: 'COLLECTOR', desc: 'Unlock all 14 vehicles' },
+            { id: 'allWorlds', title: 'EXPLORER', desc: 'Unlock all 15 worlds' },
+            { id: 'maxUpgrade', title: 'MASTER MECHANIC', desc: 'Reach level 10 on any vehicle upgrade' },
+            { id: 'fullGarage', title: 'GARAGE MASTER', desc: 'Unlock and fully upgrade 3 different vehicles' },
+            { id: 'worldTraveler', title: 'WORLD TRAVELER', desc: 'Play on 10 different worlds' },
+            { id: 'wealthy', title: 'FILTHY RICH', desc: 'Have 100,000 coins in your wallet at once' },
+            { id: 'speedDemon', title: 'SPEED DEMON', desc: 'Reach level 20 Engine on the Sonic Bolt' }
+        ];
+
+        async function init() {
+            const user = await DataManager.init();
+            if (!user) {
+                location.href = 'index.html';
+                return;
+            }
+            render();
+        }
+
+        function render() {
+            const data = DataManager.getGameData();
+            const achievements = data.achievements || {};
+            const container = document.getElementById('achievements-content');
+            container.innerHTML = '';
+
+            ACH_CONFIG.forEach(ach => {
+                const isUnlocked = achievements[ach.id];
+                const item = document.createElement('div');
+                item.className = `achievement-item ${isUnlocked ? 'unlocked' : ''}`;
+                item.innerHTML = `
+                    <div class="ach-info">
+                        <b>${ach.title}</b>
+                        <p>${ach.desc}</p>
+                    </div>
+                    <div class="ach-status">${isUnlocked ? '🏆' : '🔒'}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        window.toggleTheme = () => {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        };
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').textContent = '☀️';
+            document.getElementById('themeText').textContent = 'Light Mode';
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

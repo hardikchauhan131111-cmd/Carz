@@ -1,0 +1,9 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#f1c40f" />
+  <filter id="sandNoise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="5" stitchTiles="stitch" />
+  </filter>
+  <rect width="200" height="200" filter="url(#sandNoise)" opacity="0.15" />
+  <path d="M0 50 Q50 30 100 50 T200 50" fill="none" stroke="#d4ac0d" stroke-width="2" opacity="0.3" />
+  <path d="M0 150 Q50 130 100 150 T200 150" fill="none" stroke="#d4ac0d" stroke-width="2" opacity="0.3" />
+</svg>

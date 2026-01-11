@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carz | Power-Ups</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #ff8c42;
+            /* Orange */
+            --bg: #fff3e0;
+            --text: #1a1a1a;
+            --card-bg: #ffffff;
+            --border: #ffe0b2;
+            --primary-glow: rgba(255, 140, 66, 0.4);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --card-bg: #1a1a1a;
+            --border: #2d2d2d;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, rgba(255, 140, 66, 0.15), transparent),
+                radial-gradient(circle at bottom right, rgba(255, 140, 66, 0.1), transparent),
+                var(--bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            border: 2px solid var(--border);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+            transition: transform 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            color: var(--primary);
+        }
+
+        h1 {
+            margin: 0 0 30px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .coin-display {
+            background: rgba(255, 140, 66, 0.1);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 140, 66, 0.3);
+            font-size: 1.2rem;
+        }
+
+        .section-title {
+            text-align: left;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--text);
+            opacity: 0.6;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .ability-card {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            transition: transform 0.2s;
+        }
+
+        .ability-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .info h3 {
+            margin: 0 0 5px;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .info p {
+            margin: 0;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .buy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 120px;
+            font-family: inherit;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .buy-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            background: #ff7a2e;
+        }
+
+        .buy-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+            box-shadow: none;
+        }
+
+        .owned-badge {
+            color: #2ecc71;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Success Animation */
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pop-anim {
+            animation: pop 0.2s ease;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <button class="back-btn" onclick="location.href='auth.html'">←</button>
+        <h1>Power-Ups</h1>
+
+        <div class="coin-display" id="coin-display">Loading...</div>
+
+        <div class="ability-card" id="card-jump">
+            <div class="info">
+                <h3>HYDRAULIC JUMP</h3>
+                <p>Launch over obstacles.<br><small style="color: #ff9f43;">Consumable (One-time use)</small></p>
+            </div>
+            <div style="text-align: center;">
+                <button class="buy-btn" onclick="buyAbility('jump', 100)">
+                    100 🪙
+                </button>
+                <span class="owned-badge" id="stock-jump">Stock: 0</span>
+            </div>
+        </div>
+
+        <div class="ability-card" id="card-boost">
+            <div class="info">
+                <h3>NITRO TANK</h3>
+                <p>Super speed boost.<br><small style="color: #ff4757;">Consumable (One-time use)</small></p>
+            </div>
+            <div style="text-align: center;">
+                <button class="buy-btn" onclick="buyAbility('boost', 75)">
+                    75 🪙
+                </button>
+                <span class="owned-badge" id="stock-boost">Stock: 0</span>
+            </div>
+        </div>
+
+        <div class="ability-card" id="card-fly">
+            <div class="info">
+                <h3>LUNA JETS</h3>
+                <p>Anti-gravity boosters.<br><small style="color: #a29bfe;">Permanent Unlock</small></p>
+            </div>
+            <div style="text-align: center;">
+                <button class="buy-btn" onclick="buyAbility('fly', 2000)">
+                    2000 🪙
+                </button>
+                <span class="owned-badge" id="stock-fly" style="display:none;">OWNED</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import DataManager from './data.js';
+        import AudioManager from './audio-manager.js';
+
+        let userData = null;
+
+        window.buyAbility = async (type, cost) => {
+            if (!userData) return;
+
+            if (userData.coins >= cost) {
+
+                if (type === 'jump') {
+                    userData.coins -= cost;
+                    userData.abilities.jump = (userData.abilities.jump || 0) + 1;
+                } else if (type === 'boost') {
+                    userData.coins -= cost;
+                    userData.abilities.boost = (userData.abilities.boost || 0) + 1;
+                } else if (type === 'fly') {
+                    if (userData.abilities.fly) return; // Already owned
+                    userData.coins -= cost;
+                    userData.abilities.fly = true;
+                }
+
+                AudioManager.playClick();
+                await DataManager.save('coins', userData.coins);
+                await DataManager.save('abilities', userData.abilities);
+                updateUI();
+            } else {
+                AudioManager.playAlert();
+                const btn = document.querySelector(`#card-${type} .buy-btn`);
+                btn.classList.add('shake');
+                setTimeout(() => btn.classList.remove('shake'), 500);
+            }
+        };
+
+        function updateUI() {
+            document.getElementById('coin-display').innerText = `🪙 ${userData.coins}`;
+
+            // Jump
+            const jumpBtn = document.querySelector('#card-jump .buy-btn');
+            document.getElementById('stock-jump').innerText = `Stock: ${userData.abilities.jump || 0}`;
+
+            if (userData.coins < 100) jumpBtn.style.opacity = 0.5;
+            else jumpBtn.style.opacity = 1;
+
+            // Boost
+            const boostBtn = document.querySelector('#card-boost .buy-btn');
+            document.getElementById('stock-boost').innerText = `Stock: ${userData.abilities.boost || 0}`;
+
+            if (userData.coins < 75) boostBtn.style.opacity = 0.5;
+            else boostBtn.style.opacity = 1;
+
+            // Fly
+            const flyBtn = document.querySelector('#card-fly .buy-btn');
+            const flyBadge = document.getElementById('stock-fly');
+
+            if (userData.abilities.fly) {
+                flyBtn.style.display = 'none';
+                flyBadge.style.display = 'block';
+                document.querySelector('#card-fly').style.borderColor = '#2ecc71';
+            } else {
+                flyBadge.style.display = 'none';
+                if (userData.coins < 2000) flyBtn.style.opacity = 0.5;
+                else flyBtn.style.opacity = 1;
+            }
+        }
+
+        window.onload = async () => {
+            await DataManager.init();
+            userData = DataManager.getGameData();
+            if (!userData.abilities) userData.abilities = { jump: 0, fly: false };
+
+            updateUI();
+
+            // Theme check
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carz | Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff8c42;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --card-bg: #f8f9fa;
+            --border: #e0e0e0;
+            --primary-glow: rgba(255, 140, 66, 0.4);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --card-bg: #1a1a1a;
+            --border: #2d2d2d;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, rgba(255, 140, 66, 0.15), transparent),
+                radial-gradient(circle at bottom right, rgba(255, 140, 66, 0.1), transparent),
+                var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+            z-index: 10;
+            position: relative;
+        }
+
+        .page-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .left-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: 0.2s;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateX(-4px);
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .coin-display {
+            background: rgba(255, 140, 66, 0.1);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--primary-glow);
+        }
+
+        .shop-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: var(--bg);
+            padding: 6px;
+            border-radius: 14px;
+            border: 2px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text);
+            font-family: inherit;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .shop-item {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .shop-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .shop-item img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .shop-item span {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .upgrade-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .upgrade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            padding: 20px;
+            border-radius: 16px;
+            transition: 0.2s;
+        }
+
+        .upgrade-item:hover {
+            border-color: var(--primary);
+        }
+
+        .upgrade-info b {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .upgrade-info p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .buy-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+
+        .buy-btn:hover:not(:disabled) {
+            background: #ff7a2e;
+            transform: scale(1.05);
+        }
+
+        .buy-btn:disabled {
+            background: var(--border);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+
+        .owned-btn {
+            background: rgba(46, 213, 115, 0.1);
+            color: #2ed573;
+            border: 1px solid rgba(46, 213, 115, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite alternate;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-shapes">
+        <div class="shape" style="width: 500px; height: 500px; top: -100px; left: -100px;"></div>
+        <div class="shape" style="width: 400px; height: 400px; bottom: -50px; right: -50px; animation-delay: -5s;">
+        </div>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">Dark Mode</span>
+    </div>
+
+    <div id="game-container">
+        <div class="page-card">
+            <div class="header-row">
+                <div class="left-header">
+                    <a href="auth.html" class="back-btn">←</a>
+                    <h2>SHOP</h2>
+                </div>
+                <div class="coin-display">
+                    🪙 <span id="shop-coins">0</span>
+                </div>
+            </div>
+
+            <div class="shop-tabs">
+                <button class="tab-btn active" id="tab-upgrades" onclick="switchTab('upgrades')">UPGRADES</button>
+                <button class="tab-btn" id="tab-vehicles" onclick="switchTab('vehicles')">VEHICLES</button>
+                <button class="tab-btn" id="tab-worlds" onclick="switchTab('worlds')">WORLDS</button>
+                <button class="tab-btn" id="tab-consumables" onclick="switchTab('consumables')">CONSUMABLES</button>
+            </div>
+
+            <div id="shop-content">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import DataManager from './js/data.js';
+        import './js/audio-manager.js';
+
+        let currentTab = 'upgrades';
+        const upgradeTypes = [
+            { id: 'engine', name: 'ENGINE', desc: 'More Power & Speed' },
+            { id: 'suspension', name: 'SUSPENSION', desc: 'Better Stability' },
+            { id: 'tires', name: 'TIRES', desc: 'More Grip' }
+        ];
+
+        const vehicles = [
+            { id: 'car', name: 'STORM RACER', price: 0, img: 'car.svg' },
+            { id: 'truck', name: 'MONSTER TRUCK', price: 500, img: 'truck.svg' },
+            { id: 'walker', name: 'SNOW WALKER', price: 1000, img: 'walker.svg' },
+            { id: 'rally', name: 'RALLY BEAST', price: 2500, img: 'rally.svg' },
+            { id: 'hover', name: 'AERO BLADE', price: 5000, img: 'hover.svg' },
+            { id: 'tank', name: 'IRON TITAN', price: 8000, img: 'tank.svg' },
+            { id: 'buggy', name: 'DUNE RIPPER', price: 12000, img: 'buggy.svg' },
+            { id: 'spider', name: 'STAR JUMPER', price: 20000, img: 'spider.svg' },
+            { id: 'luna', name: 'LUNA SCOUT', price: 25000, img: 'luna.svg' }, // Featured Vehicle
+            { id: 'dragster', name: 'SONIC BOLT', price: 35000, img: 'dragster.svg' },
+            { id: 'crawler', name: 'VOID CRAWLER', price: 50000, img: 'crawler.svg' },
+            { id: 'moto', name: 'CYBER CYCLE', price: 75000, img: 'moto.svg' },
+            { id: 'ufo', name: 'COSMIC DISK', price: 100000, img: 'ufo.svg' },
+            { id: 'alpha', name: 'OMEGA PRIME', price: 150000, img: 'alpha.svg' }
+        ];
+
+        const worlds = [
+            { id: 'mountain', name: 'GREEN HILLS', price: 0, img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=300&q=80' },
+            { id: 'desert', name: 'SANDY DUNES', price: 300, img: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?auto=format&fit=crop&w=300&q=80' },
+            { id: 'snow', name: 'FROSTY PEAK', price: 600, img: 'https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=300&q=80' },
+            { id: 'moon', name: 'LUNAR BASE', price: 1500, img: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=300&q=80' },
+            { id: 'mars', name: 'RED PLANET', price: 2500, img: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=300&q=80' },
+            { id: 'volcano', name: 'MAGMA VALLEY', price: 5000, img: 'https://images.unsplash.com/photo-1541845157-a6d2d100c931?auto=format&fit=crop&w=300&q=80' },
+            { id: 'jungle', name: 'MYSTIC JUNGLE', price: 8000, img: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=300&q=80' },
+            { id: 'ocean', name: 'ABYSSAL CITY', price: 12000, img: 'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=300&q=80' },
+            { id: 'cyber', name: 'NEON CITY', price: 20000, img: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=300&q=80' },
+            { id: 'cavern', name: 'CRYSTAL CAVE', price: 35000, img: 'https://images.unsplash.com/photo-1551009175-8a68da93d5f9?auto=format&fit=crop&w=300&q=80' },
+            { id: 'void', name: 'BLACK HOLE', price: 50000, img: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=300&q=80' },
+            { id: 'titan', name: 'FROZEN MOON', price: 75000, img: 'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?auto=format&fit=crop&w=300&q=80' },
+            { id: 'inferno', name: 'HELL FIRE', price: 100000, img: 'https://images.unsplash.com/photo-1549490349-8643362247b5?auto=format&fit=crop&w=300&q=80' },
+            { id: 'dream', name: 'STARDUST WAY', price: 150000, img: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=300&q=80' },
+            { id: 'godzilla', name: 'DOOMSDAY', price: 250000, img: 'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=300&q=80' }
+        ];
+
+        window.switchTab = (tab) => {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.id === `tab-${tab}`);
+            });
+            render();
+        };
+
+        function render() {
+            const data = DataManager.getGameData();
+            const selectedVehicle = data.selectedVehicle || 'car';
+            const vehicleInfo = vehicles.find(v => v.id === selectedVehicle);
+            const container = document.getElementById('shop-content');
+            document.getElementById('shop-coins').innerText = data.coins || 0;
+            container.innerHTML = '';
+
+            if (currentTab === 'upgrades') {
+                container.innerHTML = `<p style="text-align:center; color: var(--primary); font-weight: bold; margin-bottom: 20px;">UPGRADING: ${vehicleInfo ? vehicleInfo.name : 'UNKNOWN'}</p>`;
+                const list = document.createElement('div');
+                list.className = 'upgrade-list';
+                upgradeTypes.forEach(u => {
+                    const vehicleUpgrades = DataManager.getVehicleUpgrades(selectedVehicle);
+                    const level = vehicleUpgrades[u.id] || 1;
+                    const cost = level * 100;
+                    list.innerHTML += `
+                        <div class="upgrade-item">
+                            <div class="upgrade-info">
+                                <b>${u.name} (LVL ${level})</b>
+                                <p>${u.desc}</p>
+                            </div>
+                            <button class="buy-btn" ${data.coins < cost ? 'disabled' : ''} onclick="buyUpgrade('${u.id}', ${cost})">
+                                ${cost} 🪙
+                            </button>
+                        </div>
+                    `;
+                });
+                container.appendChild(list);
+            } else if (currentTab === 'consumables') {
+                const grid = document.createElement('div');
+                grid.className = 'shop-grid';
+                const consumables = [
+                    { id: 'jump', name: 'JUMP PACK (5x)', price: 500, count: 5, icon: '🚀', desc: 'Add 5 Jumps' },
+                    { id: 'boost', name: 'NITRO TANK (3x)', price: 300, count: 3, icon: '⚡', desc: 'Add 3 Boosts' }
+                ];
+
+                consumables.forEach(item => {
+                    const abs = data.abilities || { jump: 2, boost: 0 };
+                    const currentCount = abs[item.id] || 0;
+
+                    grid.innerHTML += `
+                        <div class="shop-item">
+                            <div style="font-size: 50px; margin-bottom: 20px;">${item.icon}</div>
+                            <span>${item.name}</span>
+                            <p style="margin: 0 0 10px; opacity: 0.7;">Owned: ${currentCount}</p>
+                            <p style="font-size: 0.9rem; margin-bottom: 15px;">${item.desc}</p>
+                            <button class="buy-btn" ${data.coins < item.price ? 'disabled' : ''} onclick="buyConsumable('${item.id}', ${item.count}, ${item.price})">
+                                ${item.price} 🪙
+                            </button>
+                        </div>
+                    `;
+                });
+                container.appendChild(grid);
+            } else {
+                const grid = document.createElement('div');
+                grid.className = 'shop-grid';
+                const items = currentTab === 'vehicles' ? vehicles : worlds;
+                const unlocked = currentTab === 'vehicles' ? data.unlockedVehicles : data.unlockedWorlds;
+                const currentSelection = currentTab === 'vehicles' ? data.selectedVehicle : data.selectedWorld;
+
+                items.forEach(item => {
+                    const isUnlocked = unlocked.includes(item.id);
+                    const isSelected = currentSelection === item.id;
+
+                    grid.innerHTML += `
+                        <div class="shop-item" style="${isSelected ? 'border: 2px solid var(--primary);' : ''}">
+                            <img src="${item.img}" alt="${item.name}">
+                            <span>${item.name}</span>
+                            <div class="shop-item-actions" style="display:flex; flex-direction:column; gap:8px; width:100%;">
+                                ${isUnlocked ?
+                            `<button class="btn select-btn" ${isSelected ? 'disabled' : ''} onclick="selectItem('${currentTab === 'vehicles' ? 'vehicle' : 'world'}', '${item.id}')">
+                                        ${isSelected ? 'SELECTED' : 'SELECT'}
+                                    </button>` :
+                            `<button class="buy-btn" ${data.coins < item.price ? 'disabled' : ''} onclick="buyItem('${currentTab === 'vehicles' ? 'vehicle' : 'world'}', '${item.id}', ${item.price})">
+                                        ${item.price} 🪙
+                                    </button>`
+                        }
+                            </div>
+                        </div>
+                    `;
+                });
+                container.appendChild(grid);
+            }
+        }
+
+        window.selectItem = async (type, id) => {
+            if (type === 'vehicle') {
+                await DataManager.save('selectedVehicle', id);
+            } else {
+                await DataManager.save('selectedWorld', id);
+            }
+            render();
+        };
+
+        window.buyUpgrade = async (type, cost) => {
+            const data = DataManager.getGameData();
+            const vehicle = data.selectedVehicle || 'car';
+            if (data.coins >= cost) {
+                // Deduct cost
+                const newCoins = data.coins - cost;
+                await DataManager.save('coins', newCoins);
+
+                // Get current level and increment
+                const vehicleUpgrades = DataManager.getVehicleUpgrades(vehicle);
+                const currentLevel = vehicleUpgrades[type] || 1;
+                await DataManager.updateVehicleUpgrade(vehicle, type, currentLevel + 1);
+
+                render();
+            } else {
+                alert("NOT ENOUGH COINS!");
+            }
+        };
+
+        window.buyConsumable = async (type, count, cost) => {
+            const data = DataManager.getGameData();
+            if (data.coins >= cost) {
+                data.coins -= cost;
+
+                // Init abilities if missing
+                if (!data.abilities) data.abilities = { jump: 2, boost: 0 };
+                if (!data.abilities.boost) data.abilities.boost = 0;
+
+                // Add stock
+                data.abilities[type] = (data.abilities[type] || 0) + count;
+
+                await DataManager.save('coins', data.coins);
+                await DataManager.save('abilities', data.abilities);
+                render();
+            }
+        };
+
+        window.buyItem = async (type, id, price) => {
+            const data = DataManager.getGameData();
+            if (data.coins >= price) {
+                data.coins -= price;
+                await DataManager.save('coins', data.coins);
+                await DataManager.unlockItem(type, id);
+                render();
+            }
+        };
+
+        async function init() {
+            const user = await DataManager.init();
+            if (!user) {
+                location.href = 'index.html';
+                return;
+            }
+            render();
+        }
+
+        window.toggleTheme = () => {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        };
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').textContent = '☀️';
+            document.getElementById('themeText').textContent = 'Light Mode';
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

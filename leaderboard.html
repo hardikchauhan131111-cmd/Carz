@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carz | Leaderboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff8c42;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --card-bg: #f8f9fa;
+            --border: #e0e0e0;
+            --primary-glow: rgba(255, 140, 66, 0.4);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --card-bg: #1a1a1a;
+            --border: #2d2d2d;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, rgba(255, 140, 66, 0.15), transparent),
+                radial-gradient(circle at bottom right, rgba(255, 140, 66, 0.1), transparent),
+                var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+            z-index: 10;
+            position: relative;
+        }
+
+        .page-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: 0.2s;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateX(-4px);
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* Custom Scrollbar */
+        .leaderboard-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .leaderboard-list::-webkit-scrollbar-track {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        .leaderboard-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+            padding: 16px 24px;
+            border-radius: 16px;
+            border: 2px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .leaderboard-item:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .leaderboard-item.top-3 {
+            border-color: var(--primary);
+            background: rgba(255, 140, 66, 0.05);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .rank-box {
+            font-weight: 700;
+            color: var(--primary);
+            width: 40px;
+            font-size: 1.2rem;
+        }
+
+        .player-info {
+            flex-grow: 1;
+            font-weight: 700;
+            margin-left: 10px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .score-box {
+            font-weight: 700;
+            color: var(--text);
+            font-size: 1.1rem;
+            background: var(--border);
+            padding: 4px 12px;
+            border-radius: 8px;
+        }
+
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite alternate;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-shapes">
+        <div class="shape" style="width: 500px; height: 500px; top: -100px; left: -100px;"></div>
+        <div class="shape" style="width: 400px; height: 400px; bottom: -50px; right: -50px; animation-delay: -5s;">
+        </div>
+    </div>
+
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">Dark Mode</span>
+    </div>
+
+    <div id="game-container">
+        <div class="page-card">
+            <div class="header-row">
+                <a href="auth.html" class="back-btn">←</a>
+                <h2>GLOBAL LEADERS</h2>
+            </div>
+
+            <div id="leaderboard-content" class="leaderboard-list">
+                <p style="text-align: center; opacity: 0.6;">Loading racing stars...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import DataManager from './js/data.js';
+        import './js/audio-manager.js';
+        import './js/audio-manager.js';
+
+        async function init() {
+            const user = await DataManager.init();
+            if (!user) {
+                location.href = 'index.html';
+                return;
+            }
+            const scores = await DataManager.getLeaderboard();
+            render(scores);
+        }
+
+        function render(scores) {
+            const container = document.getElementById('leaderboard-content');
+            container.innerHTML = '';
+
+            if (scores.length === 0) {
+                container.innerHTML = '<p style="text-align:center; opacity:0.6;">No scores yet. Be the first to race!</p>';
+                return;
+            }
+
+            scores.forEach((entry, index) => {
+                const item = document.createElement('div');
+                item.className = `leaderboard-item ${index < 3 ? 'top-3' : ''}`;
+                item.innerHTML = `
+                    <span class="rank-box">#${index + 1}</span>
+                    <span class="player-info">${entry.name.toUpperCase()}</span>
+                    <span class="score-box">${Math.round(entry.score)}m</span>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        window.toggleTheme = () => {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                icon.textContent = '🌙';
+                text.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.textContent = '☀️';
+                text.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        };
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').textContent = '☀️';
+            document.getElementById('themeText').textContent = 'Light Mode';
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

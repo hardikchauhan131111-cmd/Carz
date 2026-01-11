@@ -1,0 +1,11 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#654321" />
+  <!-- Rock/Dirt details -->
+  <circle cx="30" cy="40" r="5" fill="#4d3319" opacity="0.5" />
+  <circle cx="120" cy="80" r="12" fill="#3d2b16" opacity="0.4" />
+  <circle cx="170" cy="150" r="8" fill="#593e23" opacity="0.6" />
+  <filter id="dirtNoise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+  </filter>
+  <rect width="200" height="200" filter="url(#dirtNoise)" opacity="0.2" />
+</svg>
